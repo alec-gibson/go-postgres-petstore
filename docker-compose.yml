@@ -1,0 +1,21 @@
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example 
+    ports:
+      - "5432:5432"
+
+  petstore:
+    image: petstore
+    depends_on:
+      - db
+    restart: always
+    environment:
+      CONNECTION_STRING: "postgresql://postgres:example@db:5432"
+    ports:
+      - "5000:5000"
