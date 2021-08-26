@@ -1,11 +1,11 @@
 # Pet Store Example Application
 
-An implementation of the sample petstore application from the examples in github.com/deepmap/oapi-codegen
+An implementation of the sample petstore application from the examples in [oapi-codegen](https://github.com/deepmap/oapi-codegen)
 
 ## Packages Used:
-- github.com/deepmap/oapi-codegen
-- github.com/kyleconroy/sqlc
-- github.com/golang-migrate/migrate
+- [oapi-codegen](https://github.com/deepmap/oapi-codegen)
+- [sqlc](https://github.com/kyleconroy/sqlc)
+- [migrate](https://github.com/golang-migrate/migrate)
 
 ## Run the Application Locally
 1. Run `docker build -t petstore .` to compile a docker image of the application
