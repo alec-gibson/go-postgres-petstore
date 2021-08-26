@@ -10,8 +10,7 @@ An implementation of the sample petstore application from the examples in [oapi-
 ## Run the Application Locally
 1. Run `docker build -t petstore .` to compile a docker image of the application
 2. Run `docker-compose up -d` in the root of the repo
-3. Run `./migrate.sh up` to setup the schema for the postgres database
-		- automate this
+3. Run `./migrate.sh up` to setup the schema for the postgres database - TODO: automate this
 4. The application will now be available at localhost:5000
 
 ## Changing the Database Schema:
