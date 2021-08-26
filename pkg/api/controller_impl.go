@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -25,7 +24,6 @@ func (c *controller) FindPets(e echo.Context, params FindPetsParams) error {
 
 	pets, err := c.petService.FindAll(ctx, params.Tags, params.Limit)
 	if err != nil {
-		fmt.Println(err)
 		return stacktrace.Propagate(err, "")
 	}
 

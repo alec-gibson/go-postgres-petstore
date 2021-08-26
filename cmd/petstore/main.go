@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"os"
 	"time"
 
@@ -24,7 +23,6 @@ func main() {
 	if !found {
 		connectionString = defaultConnectionString
 	}
-	fmt.Printf("Using %v as connection string\n", connectionString)
 
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
