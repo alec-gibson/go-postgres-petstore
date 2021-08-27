@@ -14,6 +14,20 @@ info:
 servers:
   - url: http://petstore.swagger.io/api
 paths:
+  /health:
+    get:
+      summary: Returns an OK status if the server is running
+      description: Returns an OK status if the server is running
+      operationId: getHealth
+      responses:
+        '200':
+          description: Server is healthy
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /pets:
     get:
       summary: Returns all pets

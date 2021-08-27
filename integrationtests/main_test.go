@@ -78,7 +78,7 @@ func (suite *IntegrationTestSuite) performAddPetRequests(requestBodies []client.
 		defer cancel()
 
 		resp, err := suite.client.AddPetWithResponse(ctx, body)
-		suite.Assert().Nil(err)
+		suite.Assert().NoError(err)
 		suite.Assert().NotNil(resp)
 		suite.Assert().Equal(http.StatusOK, (*(*resp).HTTPResponse).StatusCode)
 		suite.Assert().Equal(body.Name, (*(*resp).JSON200).Name)
@@ -97,7 +97,7 @@ func (suite *IntegrationTestSuite) performFindPetsAndAssertNumResults(params cli
 	defer cancel()
 
 	resp, err := suite.client.FindPetsWithResponse(ctx, &params)
-	suite.Assert().Nil(err)
+	suite.Assert().NoError(err)
 	suite.Assert().NotNil(resp)
 	suite.Assert().Equal(http.StatusOK, (*(*resp).HTTPResponse).StatusCode)
 	suite.Assert().Equal(numResults, len(*(*resp).JSON200))
@@ -111,7 +111,7 @@ func (suite *IntegrationTestSuite) checkFindPetByIDMatchesFindPets() {
 	defer cancel()
 
 	findPetsResp, err := suite.client.FindPetsWithResponse(ctx, &client.FindPetsParams{})
-	suite.Assert().Nil(err)
+	suite.Assert().NoError(err)
 	suite.Assert().NotNil(findPetsResp)
 	suite.Assert().Equal(http.StatusOK, (*(*findPetsResp).HTTPResponse).StatusCode)
 	suite.Assert().NotEqual(0, len(*(*findPetsResp).JSON200))
@@ -122,7 +122,7 @@ func (suite *IntegrationTestSuite) checkFindPetByIDMatchesFindPets() {
 	defer cancel()
 
 	findPetByIDResp, err := suite.client.FindPetByIDWithResponse(ctx, pet.Id)
-	suite.Assert().Nil(err)
+	suite.Assert().NoError(err)
 	suite.Assert().NotNil(findPetByIDResp)
 	suite.Assert().Equal(http.StatusOK, (*(*findPetByIDResp).HTTPResponse).StatusCode)
 
@@ -137,7 +137,7 @@ func (suite *IntegrationTestSuite) performDeletePetAndCheckPetWasDeleted() {
 	defer cancel()
 
 	findPetsResp, err := suite.client.FindPetsWithResponse(ctx, &client.FindPetsParams{})
-	suite.Assert().Nil(err)
+	suite.Assert().NoError(err)
 	suite.Assert().NotNil(findPetsResp)
 	suite.Assert().Equal(http.StatusOK, (*(*findPetsResp).HTTPResponse).StatusCode)
 	suite.Assert().NotEqual(0, len(*(*findPetsResp).JSON200))
@@ -148,7 +148,7 @@ func (suite *IntegrationTestSuite) performDeletePetAndCheckPetWasDeleted() {
 	defer cancel()
 
 	deletePetResp, err := suite.client.DeletePetWithResponse(ctx, pet.Id)
-	suite.Assert().Nil(err)
+	suite.Assert().NoError(err)
 	suite.Assert().NotNil(deletePetResp)
 	suite.Assert().Equal(http.StatusNoContent, (*(*deletePetResp).HTTPResponse).StatusCode)
 
@@ -156,7 +156,7 @@ func (suite *IntegrationTestSuite) performDeletePetAndCheckPetWasDeleted() {
 	defer cancel()
 
 	findPetByIDResp, err := suite.client.FindPetByIDWithResponse(ctx, pet.Id)
-	suite.Assert().Nil(err)
+	suite.Assert().NoError(err)
 	suite.Assert().NotNil(findPetByIDResp)
 	suite.Assert().Equal(http.StatusNotFound, (*(*findPetByIDResp).HTTPResponse).StatusCode)
 }

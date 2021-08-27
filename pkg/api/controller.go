@@ -13,6 +13,9 @@ import (
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
+	// Returns an OK status if the server is running
+	// (GET /health)
+	GetHealth(ctx echo.Context) error
 	// Returns all pets
 	// (GET /pets)
 	FindPets(ctx echo.Context, params FindPetsParams) error
@@ -30,6 +33,15 @@ type ServerInterface interface {
 // ServerInterfaceWrapper converts echo contexts to parameters.
 type ServerInterfaceWrapper struct {
 	Handler ServerInterface
+}
+
+// GetHealth converts echo context to params.
+func (w *ServerInterfaceWrapper) GetHealth(ctx echo.Context) error {
+	var err error
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetHealth(ctx)
+	return err
 }
 
 // FindPets converts echo context to params.
@@ -126,6 +138,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 		Handler: si,
 	}
 
+	router.GET(baseURL+"/health", wrapper.GetHealth)
 	router.GET(baseURL+"/pets", wrapper.FindPets)
 	router.POST(baseURL+"/pets", wrapper.AddPet)
 	router.DELETE(baseURL+"/pets/:id", wrapper.DeletePet)

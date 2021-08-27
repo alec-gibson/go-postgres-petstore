@@ -19,6 +19,10 @@ type controller struct {
 	petService service.Pet
 }
 
+func (c *controller) GetHealth(e echo.Context) error {
+	return nil
+}
+
 func (c *controller) FindPets(e echo.Context, params FindPetsParams) error {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
