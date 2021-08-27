@@ -8,7 +8,7 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o main cmd/petstore/main.go
+RUN go build -o main main.go
 
 EXPOSE 5000
 

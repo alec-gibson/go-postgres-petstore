@@ -32,8 +32,8 @@ func (p *pet) FindAll(ctx context.Context, tagsPtr *[]string, limit *int32) ([]d
 
 	if limit != nil {
 		params := db.ListPetsWithLimitParams{
-			Column1: tags,
-			Limit:   *limit,
+			Tags:       tags,
+			MaxRecords: *limit,
 		}
 		pets, err = p.db.ListPetsWithLimit(ctx, params)
 		if err != nil {

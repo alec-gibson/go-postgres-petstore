@@ -57,8 +57,8 @@ WHERE cardinality($1::varchar[]) = 0 OR tag = ANY($1::varchar[])
 ORDER BY name
 `
 
-func (q *Queries) ListPets(ctx context.Context, dollar_1 []string) ([]Pet, error) {
-	rows, err := q.db.Query(ctx, ListPets, dollar_1)
+func (q *Queries) ListPets(ctx context.Context, tags []string) ([]Pet, error) {
+	rows, err := q.db.Query(ctx, ListPets, tags)
 	if err != nil {
 		return nil, err
 	}
@@ -84,12 +84,12 @@ ORDER BY name LIMIT $2
 `
 
 type ListPetsWithLimitParams struct {
-	Column1 []string `db:"column_1"`
-	Limit   int32    `db:"limit"`
+	Tags       []string `db:"tags"`
+	MaxRecords int32    `db:"max_records"`
 }
 
 func (q *Queries) ListPetsWithLimit(ctx context.Context, arg ListPetsWithLimitParams) ([]Pet, error) {
-	rows, err := q.db.Query(ctx, ListPetsWithLimit, arg.Column1, arg.Limit)
+	rows, err := q.db.Query(ctx, ListPetsWithLimit, arg.Tags, arg.MaxRecords)
 	if err != nil {
 		return nil, err
 	}

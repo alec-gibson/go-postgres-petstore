@@ -10,7 +10,7 @@ type Querier interface {
 	CreatePet(ctx context.Context, arg CreatePetParams) (Pet, error)
 	DeletePet(ctx context.Context, id int64) error
 	FindPetByID(ctx context.Context, id int64) (Pet, error)
-	ListPets(ctx context.Context, dollar_1 []string) ([]Pet, error)
+	ListPets(ctx context.Context, tags []string) ([]Pet, error)
 	ListPetsWithLimit(ctx context.Context, arg ListPetsWithLimitParams) ([]Pet, error)
 }
 
