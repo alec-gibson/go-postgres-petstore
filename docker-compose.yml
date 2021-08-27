@@ -16,7 +16,7 @@ services:
       - db
     restart: always
     environment:
-      CONNECTION_STRING: "postgresql://postgres:example@db:5432"
       MIGRATE_DATABASE: "postgres://postgres:example@db:5432?sslmode=disable"
+      CONNECTION_STRING: "postgresql://postgres:example@db:5432"
     ports:
       - "5000:5000"

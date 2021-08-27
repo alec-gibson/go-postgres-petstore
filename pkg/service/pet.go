@@ -11,10 +11,10 @@ import (
 
 type (
 	Pet interface {
-		FindAll(ctx context.Context, tags *[]string, limit *int32) ([]db.Pet, error)
-		Create(ctx context.Context, name string, tag *string) (db.Pet, error)
+		FindAll(ctx context.Context, tags *[]string, limit *int32) ([]db.PetstorePet, error)
+		Create(ctx context.Context, name string, tag *string) (db.PetstorePet, error)
 		Delete(ctx context.Context, id int64) error
-		FindByID(ctx context.Context, id int64) (db.Pet, error)
+		FindByID(ctx context.Context, id int64) (db.PetstorePet, error)
 	}
 
 	pet struct {
@@ -22,8 +22,8 @@ type (
 	}
 )
 
-func (p *pet) FindAll(ctx context.Context, tagsPtr *[]string, limit *int32) ([]db.Pet, error) {
-	var pets []db.Pet
+func (p *pet) FindAll(ctx context.Context, tagsPtr *[]string, limit *int32) ([]db.PetstorePet, error) {
+	var pets []db.PetstorePet
 	var err error
 
 	tags := []string{}
@@ -50,7 +50,7 @@ func (p *pet) FindAll(ctx context.Context, tagsPtr *[]string, limit *int32) ([]d
 	return pets, nil
 }
 
-func (p *pet) Create(ctx context.Context, name string, tag *string) (db.Pet, error) {
+func (p *pet) Create(ctx context.Context, name string, tag *string) (db.PetstorePet, error) {
 	tagParam := sql.NullString{}
 	if tag != nil {
 		tagParam.Valid = true
@@ -82,7 +82,7 @@ func (p *pet) Delete(ctx context.Context, id int64) error {
 	return nil
 }
 
-func (p *pet) FindByID(ctx context.Context, id int64) (db.Pet, error) {
+func (p *pet) FindByID(ctx context.Context, id int64) (db.PetstorePet, error) {
 	pet, err := p.db.FindPetByID(ctx, id)
 	if err != nil {
 		if err.Error() == pgx.ErrNoRows.Error() {
