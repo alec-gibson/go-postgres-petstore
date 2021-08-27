@@ -34,3 +34,10 @@ Run the `run-integration-tests.sh` script. This script performs the following st
 2. It brings up (or recreates) all containers using docker compose
 3. It waits for the application to become healthy
 4. It runs all integration tests (defined in the `integrationtests` directory)
+
+## TODO:
+1. Add unit tests
+2. Add pipeline logic to build / test / upload the application container on every master commit
+3. Add pipeline logic to deploy the application to the cloud on every master commit
+4. Expand the scope of the application, so there are multiple tables and queries with joins
+5. Fork this repo and make something actually useful
