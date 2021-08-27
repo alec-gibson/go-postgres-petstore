@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -24,18 +25,25 @@ func (c *controller) FindPets(e echo.Context, params FindPetsParams) error {
 
 	pets, err := c.petService.FindAll(ctx, params.Tags, params.Limit)
 	if err != nil {
-		return stacktrace.Propagate(err, "")
+		fmt.Println(err)
+		return respondByErrorCode(e, err)
 	}
 
 	response := []Pet{}
 	for _, pet := range pets {
-		response = append(response, Pet{
+		responsePet := Pet{
 			NewPet: NewPet{
 				Name: pet.Name,
-				Tag:  &pet.Tag.String,
 			},
 			Id: pet.ID,
-		})
+		}
+		if pet.Tag.Valid {
+			responsePet.Tag = &pet.Tag.String
+		} else {
+			responsePet.Tag = nil
+		}
+
+		response = append(response, responsePet)
 	}
 	e.JSON(http.StatusOK, response)
 	return nil
@@ -52,16 +60,22 @@ func (c *controller) AddPet(e echo.Context) error {
 
 	createdPet, err := c.petService.Create(ctx, pet.Name, pet.Tag)
 	if err != nil {
-		return stacktrace.Propagate(err, "")
+		fmt.Println(err)
+		return respondByErrorCode(e, err)
 	}
 
 	response := Pet{
 		NewPet: NewPet{
 			Name: createdPet.Name,
-			Tag:  &createdPet.Tag.String,
 		},
 		Id: createdPet.ID,
 	}
+	if createdPet.Tag.Valid {
+		response.Tag = &createdPet.Tag.String
+	} else {
+		response.Tag = nil
+	}
+
 	e.JSON(http.StatusOK, response)
 	return nil
 }
@@ -72,10 +86,11 @@ func (c *controller) DeletePet(e echo.Context, id int64) error {
 
 	err := c.petService.Delete(ctx, id)
 	if err != nil {
-		return stacktrace.Propagate(err, "")
+		fmt.Println(err)
+		return respondByErrorCode(e, err)
 	}
 
-	e.Response().Status = http.StatusNoContent
+	e.String(http.StatusNoContent, "")
 	return nil
 }
 
@@ -85,17 +100,34 @@ func (c *controller) FindPetByID(e echo.Context, id int64) error {
 
 	pet, err := c.petService.FindByID(ctx, id)
 	if err != nil {
-		return stacktrace.Propagate(err, "")
+		fmt.Println(err)
+		return respondByErrorCode(e, err)
 	}
 
 	response := Pet{
 		NewPet: NewPet{
 			Name: pet.Name,
-			Tag:  &pet.Tag.String,
 		},
 		Id: pet.ID,
 	}
+	if pet.Tag.Valid {
+		response.Tag = &pet.Tag.String
+	} else {
+		response.Tag = nil
+	}
+
 	e.JSON(http.StatusOK, response)
+	return nil
+}
+
+func respondByErrorCode(e echo.Context, err error) error {
+	code := stacktrace.GetCode(err)
+	switch code {
+	case service.ErrNotFound:
+		e.String(http.StatusNotFound, "Not found.")
+	default:
+		return err
+	}
 	return nil
 }
 

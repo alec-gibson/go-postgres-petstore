@@ -5,6 +5,7 @@ import (
 	"database/sql"
 
 	"alecgibson.ca/go-postgres-petstore/pkg/db"
+	"github.com/jackc/pgx/v4"
 	"github.com/palantir/stacktrace"
 )
 
@@ -71,7 +72,11 @@ func (p *pet) Create(ctx context.Context, name string, tag *string) (db.Pet, err
 func (p *pet) Delete(ctx context.Context, id int64) error {
 	err := p.db.DeletePet(ctx, id)
 	if err != nil {
-		return stacktrace.Propagate(err, "")
+		if err.Error() == pgx.ErrNoRows.Error() {
+			return stacktrace.PropagateWithCode(err, ErrNotFound, "")
+		} else {
+			return stacktrace.Propagate(err, "")
+		}
 	}
 
 	return nil
@@ -80,7 +85,11 @@ func (p *pet) Delete(ctx context.Context, id int64) error {
 func (p *pet) FindByID(ctx context.Context, id int64) (db.Pet, error) {
 	pet, err := p.db.FindPetByID(ctx, id)
 	if err != nil {
-		return pet, stacktrace.Propagate(err, "")
+		if err.Error() == pgx.ErrNoRows.Error() {
+			return pet, stacktrace.PropagateWithCode(err, ErrNotFound, "")
+		} else {
+			return pet, stacktrace.Propagate(err, "")
+		}
 	}
 
 	return pet, nil
