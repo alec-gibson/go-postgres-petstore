@@ -1,5 +1,7 @@
 package service
 
+import "github.com/palantir/stacktrace"
+
 const (
-	ErrNotFound = iota
+	ErrNotFound stacktrace.ErrorCode = iota
 )

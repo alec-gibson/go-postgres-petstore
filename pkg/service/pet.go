@@ -1,10 +1,11 @@
+//go:generate mockgen -destination=mock_pet.go -package=service alecgibson.ca/go-postgres-petstore/pkg/service Pet
 package service
 
 import (
 	"context"
 	"database/sql"
 
-	"alecgibson.ca/go-postgres-petstore/pkg/db"
+	"alecgibson.ca/go-postgres-petstore/pkg/infrastructure/db"
 	"github.com/jackc/pgx/v4"
 	"github.com/palantir/stacktrace"
 )
@@ -32,19 +33,14 @@ func (p *pet) FindAll(ctx context.Context, tagsPtr *[]string, limit *int32) ([]d
 	}
 
 	if limit != nil {
-		params := db.ListPetsWithLimitParams{
-			Tags:       tags,
-			MaxRecords: *limit,
-		}
+		params := db.ListPetsWithLimitParams{Tags: tags, MaxRecords: *limit}
 		pets, err = p.db.ListPetsWithLimit(ctx, params)
-		if err != nil {
-			return nil, stacktrace.Propagate(err, "")
-		}
 	} else {
 		pets, err = p.db.ListPets(ctx, tags)
-		if err != nil {
-			return nil, stacktrace.Propagate(err, "")
-		}
+	}
+
+	if err != nil {
+		return nil, stacktrace.Propagate(err, "")
 	}
 
 	return pets, nil
@@ -56,11 +52,8 @@ func (p *pet) Create(ctx context.Context, name string, tag *string) (db.Petstore
 		tagParam.Valid = true
 		tagParam.String = *tag
 	}
-	params := db.CreatePetParams{
-		Name: name,
-		Tag:  tagParam,
-	}
 
+	params := db.CreatePetParams{Name: name, Tag: tagParam}
 	pet, err := p.db.CreatePet(ctx, params)
 	if err != nil {
 		return pet, stacktrace.Propagate(err, "")

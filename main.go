@@ -7,8 +7,8 @@ import (
 	"os"
 	"time"
 
-	"alecgibson.ca/go-postgres-petstore/pkg/api"
-	"alecgibson.ca/go-postgres-petstore/pkg/db"
+	"alecgibson.ca/go-postgres-petstore/pkg/infrastructure/db"
+	"alecgibson.ca/go-postgres-petstore/pkg/interface/api"
 	"alecgibson.ca/go-postgres-petstore/pkg/service"
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
